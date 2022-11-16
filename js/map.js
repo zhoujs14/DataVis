@@ -13,6 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
     })
   );
 
+  polygonSeries.mapPolygons.template.setAll({
+    tooltipText: "{name}: {worldcup} times",
+    templateField: "polygonSettings"
+  });
+
   polygonSeries.data.setAll([{
     id: "AR",
     worldcup: 2,
@@ -26,9 +31,4 @@ document.addEventListener("DOMContentLoaded", function () {
       fill: am5.color(0xFFDC02)
     }
   }]);
-
-  polygonSeries.mapPolygons.template.setAll({
-    tooltipText: "{name}: {cases} cases",
-    templateField: "polygonSettings"
-  });
 });
