@@ -56,7 +56,19 @@
 
     // Code for Force Layout Simulator
 
-    var circles = d3.selectAll("circle");
+    var circles = svg.selectAll("circle")
+      .data(abuses)
+      .enter().append('circle')
+      .attr('r', function (d) {
+        return d.cases;
+      })
+      .attr('fill', function (d) {
+        return myColorScale(d.cases);
+      });
+
+    svg.append("g")
+      .attr("transform", "translate(0, 450)")
+      .call(d3.axisBottom(myScale));
 
     var tooltip = d3.select(".toast");
     var title = d3.select(".toast-header .me-auto");
@@ -79,9 +91,27 @@
           .style("top", (coords[1] - 95) + "px");
       });
 
-    var simulation = d3.forceSimulation();
+    var simulation = d3.forceSimulation()
+      .force("collide", d3.forceCollide().radius(function (d) { return d.cases + 5; }))
+      // .force("center", d3.forceCenter(400, 240))
+      .force('x', d3.forceX().x(function (d) {
+        return myScale(d.cases);
+      }))
+      .force('y', d3.forceY().strength(0.01).y(function (d) {
+        return 480;
+      }));
+
 
     simulation.nodes(abuses);
+    simulation.on("tick", function () {
+      circles
+        .attr("cx", function (d) {
+          return d.x
+        })
+        .attr("cy", function (d) {
+          return d.y
+        })
+    });
   </script>
 </body>
 
